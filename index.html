@@ -55,9 +55,10 @@ function render(){
   if(!S.size){
     a.innerHTML=`<div style="min-height:100vh;padding:40px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;text-align:center">
 <img src="logo.png" alt="Logo urbanstep.bga" style="width:180px;height:180px">
-<div class="bb" style="font-size:56px;letter-spacing:6px;line-height:1">URBANSTEP.BGA</div>
+<div class="bb" style="font-size:clamp(30px,10vw,56px);letter-spacing:4px;line-height:1">URBANSTEP.BGA</div>
 <div style="font-size:18px;color:#b8b8b0">Camisetas hombre</div>
 <a href="https://www.instagram.com/urbanstep.bga/" target="_blank" rel="noopener" style="color:#e4ff3a;font-size:16px;font-weight:700;text-decoration:underline">Síguenos en Instagram @urbanstep.bga</a>
+<a href="https://www.tiktok.com/@urbanstep.bga" target="_blank" rel="noopener" style="color:#e4ff3a;font-size:16px;font-weight:700;text-decoration:underline;margin-top:-12px">Y en TikTok @urbanstep.bga</a>
 <div class="bb" style="font-size:48px;letter-spacing:3px;line-height:1;margin-top:12px">ELIGE TU TALLA</div>
 <div style="font-size:16px;color:#b8b8b0;max-width:420px">Toca tu talla y te mostramos solo las camisetas que hay en ella.</div>
 <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;width:100%;max-width:420px">
@@ -102,7 +103,7 @@ ${items.length===0?`<div style="background:#141414;border-radius:24px;padding:40
 <div style="display:flex;flex-wrap:wrap;gap:12px"><div style="background:#141414;border-radius:18px;padding:16px 20px;flex:1 1 200px"><div class="lbl" style="font-weight:400">PRECIO NORMAL</div><div class="bb" style="font-size:40px;line-height:1.1">$120.000</div></div><div style="background:#141414;border-radius:18px;padding:16px 20px;flex:1 1 200px"><div class="lbl" style="font-weight:400">LLEVA 2</div><div class="bb" style="font-size:40px;line-height:1.1">${twoPrice}</div></div>${bf?'<div class="y" style="border-radius:18px;padding:16px 20px;flex:1 1 200px"><div style="font-size:13px;letter-spacing:2px;font-weight:700">BLACK FRIDAY · HASTA EL 5 DE DICIEMBRE</div><div class="bb" style="font-size:40px;line-height:1.1">$100.000</div></div>':''}</div>
 <div style="font-size:15px;color:#b8b8b0">Mujer, camiseta corta: S · M · L · XL</div>
 <div style="display:flex;flex-wrap:wrap;gap:12px"><a href="${gen}" class="pill y">WhatsApp 315 518 5696</a><a href="${gen2}" class="pill o">WhatsApp 318 603 6255</a></div>
-<a href="https://www.instagram.com/urbanstep.bga/" target="_blank" rel="noopener" class="pill" style="align-self:flex-start;border:2px solid #e4ff3a;color:#e4ff3a">Instagram @urbanstep.bga</a></div></div>${zoom}`;
+<div style="display:flex;flex-wrap:wrap;gap:12px"><a href="https://www.instagram.com/urbanstep.bga/" target="_blank" rel="noopener" class="pill" style="align-self:flex-start;border:2px solid #e4ff3a;color:#e4ff3a">Instagram @urbanstep.bga</a><a href="https://www.tiktok.com/@urbanstep.bga" target="_blank" rel="noopener" class="pill" style="border:2px solid #e4ff3a;color:#e4ff3a">TikTok @urbanstep.bga</a></div></div></div>${zoom}`;
 }
 document.addEventListener('click',e=>{
   const t=e.target.closest('[data-size],[data-open],[data-close],[data-f],[data-sort],[data-home],#tf,#cf,#tmore');if(!t)return;
