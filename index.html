@@ -99,7 +99,7 @@ ${(!q&&tc.total>10)?`<button id="tmore" style="align-self:flex-start;min-height:
   let cartV='';
   if(S.view==='cart'&&S.cart.length){const c=S.cart,tot=cartTotal(c.length),full=c.length*(bf?100000:120000);
     const lines=c.map(it=>'• REF '+pad(it.n)+' ('+P[it.n-1]+') talla '+it.z).join('\n');
-    const links='https://urbanstep-bga.github.io/us-fotos/p/'+pad(c[0].n)+'.html';
+    const links=c.length>1?'Fotos del pedido: https://urbanstep-bga.github.io/us-fotos/pedido.html?r='+c.map(it=>it.n+'-'+it.z).join(','):'https://urbanstep-bga.github.io/us-fotos/p/'+pad(c[0].n)+'.html';
     const txt='Hola, quiero hacer este pedido:\n'+lines+'\nTotal: '+money(tot)+'\n'+links;
     cartV=`<div data-cclose="1" style="position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.94);overflow-y:auto;display:flex;justify-content:center;padding:16px"><div id="cin" style="width:100%;max-width:560px;display:flex;flex-direction:column;gap:14px;align-self:flex-start">
 <div style="display:flex;justify-content:space-between;align-items:center"><div class="bb" style="font-size:36px;line-height:1">MI PEDIDO</div><button data-cclose="1" style="min-height:44px;padding:0 20px;border-radius:999px;border:2px solid #f5f5f2;background:transparent;color:#f5f5f2;font-size:15px;font-weight:700">CERRAR ✕</button></div>
