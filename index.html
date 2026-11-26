@@ -36,7 +36,9 @@ const bf=bogota<='2026-12-05',priceNow=bf?'$100.000':'$120.000',twoPrice=bf?'$19
 const ph1='573155185696',ph2='573186036255';
 const wa=(ph,t)=>'https://wa.me/'+ph+'?text='+encodeURIComponent(t);
 const pad=n=>String(n).padStart(3,'0');
-const S={size:'',zoom:0,fb:-1,fc:-1,ft:-1,sort:'new',tagQ:'',tagMore:false,fopen:false};
+const S={cart:[],view:'',size:'',zoom:0,fb:-1,fc:-1,ft:-1,sort:'new',tagQ:'',tagMore:false,fopen:false};
+const cartTotal=n=>{const two=bf?190000:200000,one=bf?100000:120000;return Math.floor(n/2)*two+(n%2)*one};
+const money=v=>'$'+v.toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.');
 const $=s=>document.getElementById(s);
 const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
 const base=z=>P.map((n,i)=>({n:i+1,name:n,m:MT[i]})).filter(x=>x.m&&has(AV[z],x.n));
@@ -92,7 +94,19 @@ ${(!q&&tc.total>10)?`<button id="tmore" style="align-self:flex-start;min-height:
 <img src="f/${r}.jpg" alt="${esc(nm)}" style="width:100%;height:auto;max-height:68vh;object-fit:contain;border-radius:18px;background:#1a1a1a">
 <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px"><div class="bb" style="font-size:32px;line-height:1.05">${esc(nm)}</div><div style="font-size:13px;color:#b8b8b0;flex:none">REF ${r} · Talla ${z}</div></div>
 <div style="display:flex;align-items:baseline">${price()}</div>
-<div style="display:flex;flex-wrap:wrap;gap:10px"><a href="${wa(ph1,txt)}" class="y" style="flex:1 1 200px;min-height:56px;display:flex;align-items:center;justify-content:center;border-radius:999px;font-size:16px;font-weight:700">PEDIR TALLA ${z} · 315 518 5696</a><a href="${wa(ph2,txt)}" class="o" style="flex:1 1 200px;min-height:56px;display:flex;align-items:center;justify-content:center;border-radius:999px;font-size:16px;font-weight:700">PEDIR TALLA ${z} · 318 603 6255</a></div><div style="height:16px"></div></div></div>`;}
+<div style="font-size:15px;color:#b8b8b0">${S.cart.length?'Ya llevas '+S.cart.length+(S.cart.length===1?' camiseta':' camisetas')+' en tu pedido.':'¿Quieres llevar más camisetas o solo esta?'}</div>
+<div style="display:flex;flex-wrap:wrap;gap:10px"><button data-add="${n}" data-go="1" class="y" style="flex:1 1 200px;min-height:56px;border-radius:999px;font-size:16px;font-weight:700">${S.cart.length?'AGREGAR Y TERMINAR PEDIDO':'SOLO ESTA · PEDIR'}</button><button data-add="${n}" class="o" style="flex:1 1 200px;min-height:56px;background:transparent;color:#f5f5f2;border-radius:999px;font-size:16px;font-weight:700">${S.cart.length?'AGREGAR Y SEGUIR ELIGIENDO':'ELEGIR MÁS CAMISETAS'}</button></div><div style="height:16px"></div></div></div>`;}
+  let cartV='';
+  if(S.view==='cart'&&S.cart.length){const c=S.cart,tot=cartTotal(c.length),full=c.length*(bf?100000:120000);
+    const lines=c.map(it=>'• REF '+pad(it.n)+' ('+P[it.n-1]+') talla '+it.z+'\nhttps://urbanstep-bga.github.io/us-fotos/p/'+pad(it.n)+'.html').join('\n');
+    const txt='Hola, quiero hacer este pedido:\n'+lines+'\nTotal: '+money(tot);
+    cartV=`<div data-cclose="1" style="position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.94);overflow-y:auto;display:flex;justify-content:center;padding:16px"><div id="cin" style="width:100%;max-width:560px;display:flex;flex-direction:column;gap:14px;align-self:flex-start">
+<div style="display:flex;justify-content:space-between;align-items:center"><div class="bb" style="font-size:36px;line-height:1">MI PEDIDO</div><button data-cclose="1" style="min-height:44px;padding:0 20px;border-radius:999px;border:2px solid #f5f5f2;background:transparent;color:#f5f5f2;font-size:15px;font-weight:700">CERRAR ✕</button></div>
+${c.map((it,i)=>`<div style="display:flex;gap:12px;align-items:center;background:#141414;border-radius:18px;padding:10px"><img src="f/${pad(it.n)}.jpg" alt="" style="width:72px;height:72px;object-fit:cover;border-radius:12px"><div style="flex:1;min-width:0"><div class="bb" style="font-size:22px;line-height:1.05">${esc(P[it.n-1])}</div><div style="font-size:13px;color:#b8b8b0">REF ${pad(it.n)} · Talla ${it.z}</div></div><button data-rm="${i}" style="min-height:44px;padding:0 14px;border-radius:999px;border:2px solid #3a3a3a;background:transparent;color:#b8b8b0;font-size:14px;font-weight:700">Quitar</button></div>`).join('')}
+<div style="background:#141414;border-radius:18px;padding:16px 20px"><div class="lbl">TOTAL ${c.length} ${c.length===1?'CAMISETA':'CAMISETAS'}</div><div class="bb" style="font-size:44px;line-height:1.1;color:#e4ff3a">${money(tot)}</div>${c.length>1&&tot<full?'<div style="font-size:14px;color:#b8b8b0">Ahorras '+money(full-tot)+' con la promo de 2</div>':''}${c.length===1?'<div style="font-size:14px;color:#b8b8b0">Agrega otra y llévate 2 por '+twoPrice+'</div>':''}</div>
+<button data-cclose="1" class="o" style="min-height:52px;background:transparent;color:#f5f5f2;border-radius:999px;font-size:16px;font-weight:700">SEGUIR ELIGIENDO</button>
+<div style="display:flex;flex-wrap:wrap;gap:10px"><a href="${wa(ph1,txt)}" class="y" style="flex:1 1 200px;min-height:56px;display:flex;align-items:center;justify-content:center;border-radius:999px;font-size:16px;font-weight:700">ENVIAR PEDIDO · 315 518 5696</a><a href="${wa(ph2,txt)}" class="o" style="flex:1 1 200px;min-height:56px;display:flex;align-items:center;justify-content:center;border-radius:999px;font-size:16px;font-weight:700">ENVIAR PEDIDO · 318 603 6255</a></div><div style="height:16px"></div></div></div>`;}
+  const bar=(S.cart.length&&!S.zoom&&S.view!=='cart')?`<button data-cart="1" class="y" style="position:fixed;left:16px;right:16px;bottom:16px;z-index:40;max-width:560px;margin:0 auto;min-height:56px;border-radius:999px;font-size:16px;font-weight:700;box-shadow:0 4px 20px rgba(0,0,0,.6)">VER MI PEDIDO (${S.cart.length}) · ${money(cartTotal(S.cart.length))}</button>`:'';
   a.innerHTML=`<div style="position:sticky;top:0;z-index:10;background:rgba(10,10,10,.95);border-bottom:1px solid #222;padding:10px 16px"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:12px"><img src="logo.png" alt="Logo" data-home="1" style="width:44px;height:44px;flex:none;cursor:pointer"><div style="display:flex;gap:8px;overflow-x:auto;flex:1;padding:2px">${SIZES.map(s=>`<button data-size="${s}" style="min-width:54px;min-height:44px;border-radius:999px;padding:0 14px;font-size:16px;font-weight:700;border:2px solid ${s===z?'#e4ff3a':'#3a3a3a'};background:${s===z?'#e4ff3a':'transparent'};color:${s===z?'#0a0a0a':'#f5f5f2'}">${s}</button>`).join('')}</div></div></div>
 <div style="max-width:1200px;margin:0 auto;padding:24px 16px 48px;display:flex;flex-direction:column;gap:24px">
 <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap"><div class="bb" style="font-size:44px;letter-spacing:2px;line-height:1">TALLA ${z}</div><div style="font-size:16px;color:#b8b8b0">${items.length===1?'1 camiseta':items.length+' camisetas'}</div></div>
@@ -103,12 +117,16 @@ ${items.length===0?`<div style="background:#141414;border-radius:24px;padding:40
 <div style="display:flex;flex-wrap:wrap;gap:12px"><div style="background:#141414;border-radius:18px;padding:16px 20px;flex:1 1 200px"><div class="lbl" style="font-weight:400">PRECIO NORMAL</div><div class="bb" style="font-size:40px;line-height:1.1">$120.000</div></div><div style="background:#141414;border-radius:18px;padding:16px 20px;flex:1 1 200px"><div class="lbl" style="font-weight:400">LLEVA 2</div><div class="bb" style="font-size:40px;line-height:1.1">${twoPrice}</div></div>${bf?'<div class="y" style="border-radius:18px;padding:16px 20px;flex:1 1 200px"><div style="font-size:13px;letter-spacing:2px;font-weight:700">BLACK FRIDAY · HASTA EL 5 DE DICIEMBRE</div><div class="bb" style="font-size:40px;line-height:1.1">$100.000</div></div>':''}</div>
 <div style="font-size:15px;color:#b8b8b0">Mujer, camiseta corta: S · M · L · XL</div>
 <div style="display:flex;flex-wrap:wrap;gap:12px"><a href="${gen}" class="pill y">WhatsApp 315 518 5696</a><a href="${gen2}" class="pill o">WhatsApp 318 603 6255</a></div>
-<div style="display:flex;flex-wrap:wrap;gap:12px"><a href="https://www.instagram.com/urbanstep.bga/" target="_blank" rel="noopener" class="pill" style="align-self:flex-start;border:2px solid #e4ff3a;color:#e4ff3a">Instagram @urbanstep.bga</a><a href="https://www.tiktok.com/@urbanstep.bga" target="_blank" rel="noopener" class="pill" style="border:2px solid #e4ff3a;color:#e4ff3a">TikTok @urbanstep.bga</a></div></div></div>${zoom}`;
+<div style="display:flex;flex-wrap:wrap;gap:12px"><a href="https://www.instagram.com/urbanstep.bga/" target="_blank" rel="noopener" class="pill" style="align-self:flex-start;border:2px solid #e4ff3a;color:#e4ff3a">Instagram @urbanstep.bga</a><a href="https://www.tiktok.com/@urbanstep.bga" target="_blank" rel="noopener" class="pill" style="border:2px solid #e4ff3a;color:#e4ff3a">TikTok @urbanstep.bga</a></div></div></div>${zoom}${bar}${cartV}`;
 }
 document.addEventListener('click',e=>{
-  const t=e.target.closest('[data-size],[data-open],[data-close],[data-f],[data-sort],[data-home],#tf,#cf,#tmore');if(!t)return;
+  const t=e.target.closest('[data-size],[data-open],[data-close],[data-add],[data-cart],[data-cclose],[data-rm],[data-f],[data-sort],[data-home],#tf,#cf,#tmore');if(!t)return;
   const d=t.dataset;
   if(d.close){if(e.target.closest('#zin')&&!e.target.closest('button'))return;S.zoom=0}
+  else if(d.add){const n=+d.add;if(!S.cart.some(it=>it.n===n&&it.z===S.size))S.cart.push({n,z:S.size});S.zoom=0;if(d.go)S.view='cart'}
+  else if(d.cart)S.view='cart'
+  else if(d.cclose){if(e.target.closest('#cin')&&!e.target.closest('button'))return;S.view=''}
+  else if(d.rm){S.cart.splice(+d.rm,1);if(!S.cart.length)S.view=''}
   else if(d.size){S.size=d.size;S.zoom=0;window.scrollTo(0,0)}
   else if(d.home){S.size='';window.scrollTo(0,0)}
   else if(d.open)S.zoom=+d.open;
